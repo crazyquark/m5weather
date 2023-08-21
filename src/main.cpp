@@ -26,15 +26,17 @@ float pressure = 0.0;
 
 void setup() {
     M5.begin();             // Init M5StickCPlus.  初始化M5StickCPlus
-    M5.Lcd.setRotation(3);  // Rotate the screen.  旋转屏幕
+    M5.Lcd.setRotation(0);  // Rotate the screen.  旋转屏幕
     Wire.begin(0, 26);
 
     qmp6988.init();
-    M5.lcd.println(F("ENVIII Hat(SHT30 and QMP6988) test"));
+    M5.lcd.setTextSize(2);
+    M5.lcd.setTextColor(5000);
+    M5.lcd.println(F("Environment"));
 }
 
 void loop() {
-    pressure = qmp6988.calcPressure();
+    pressure = qmp6988.calcPressure() / 1000;
     if (sht30.get() == 0) {  // Obtain the data of shT30.  获取sht30的数据
         tmp = sht30.cTemp;   // Store the temperature obtained from shT30.
                              // 将sht30获取到的温度存储
@@ -46,8 +48,8 @@ void loop() {
     M5.lcd.fillRect(0, 20, 100, 60,
                     BLACK);  // Fill the screen with black (to clear the
                              // screen).  将屏幕填充黑色(用来清屏)
-    M5.lcd.setCursor(0, 20);
-    M5.Lcd.printf("Temp: %2.1f  \r\nHumi: %2.0f%%  \r\nPressure:%2.0fPa\r\n",
+    M5.lcd.setCursor(0, 30);
+    M5.Lcd.printf("Temp:\r\n %2.1f  \r\nHumidity:\r\n %2.0f%%  \r\nPressure:\r\n%2.2fkPa\r\n",
                   tmp, hum, pressure);
     delay(2000);
 }
